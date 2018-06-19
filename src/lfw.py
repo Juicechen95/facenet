@@ -39,10 +39,11 @@ def evaluate(embeddings, actual_issame, nrof_folds=10, distance_metric=0, subtra
     tpr, fpr, accuracy = facenet.calculate_roc(thresholds, embeddings1, embeddings2,
         np.asarray(actual_issame), nrof_folds=nrof_folds, distance_metric=distance_metric, subtract_mean=subtract_mean)
     thresholds = np.arange(0, 4, 0.001)
-    val, val_std, far = facenet.calculate_val(thresholds, embeddings1, embeddings2,
-        np.asarray(actual_issame), 1e-3, nrof_folds=nrof_folds, distance_metric=distance_metric, subtract_mean=subtract_mean)
-    return tpr, fpr, accuracy, val, val_std, far
-
+    #val, val_std, far = facenet.calculate_val(thresholds, embeddings1, embeddings2,
+    #    np.asarray(actual_issame), 1e-3, nrof_folds=nrof_folds, distance_metric=distance_metric, subtract_mean=subtract_mean)
+    # return tpr, fpr, accuracy, val, val_std, far
+    return tpr, fpr, accuracy, 0, 0, 0
+'''
 def get_paths(lfw_dir, pairs):
     nrof_skipped_pairs = 0
     path_list = []
@@ -56,6 +57,27 @@ def get_paths(lfw_dir, pairs):
             path0 = add_extension(os.path.join(lfw_dir, pair[0], pair[0] + '_' + '%04d' % int(pair[1])))
             path1 = add_extension(os.path.join(lfw_dir, pair[2], pair[2] + '_' + '%04d' % int(pair[3])))
             issame = False
+        if os.path.exists(path0) and os.path.exists(path1):    # Only add the pair if both paths exist
+            path_list += (path0,path1)
+            issame_list.append(issame)
+        else:
+            nrof_skipped_pairs += 1
+    if nrof_skipped_pairs>0:
+        print('Skipped %d image pairs' % nrof_skipped_pairs)
+    
+    return path_list, issame_list
+'''
+def get_paths(lfw_dir, pairs):
+    nrof_skipped_pairs = 0
+    path_list = []
+    issame_list = []
+    for pair in pairs:
+        if pair[1] == '1':
+            continue
+        else:
+            path0 = add_extension(os.path.join(lfw_dir, pair[0], '0face' ))
+            path1 = add_extension(os.path.join(lfw_dir, pair[0], 'card'))
+            issame = True
         if os.path.exists(path0) and os.path.exists(path1):    # Only add the pair if both paths exist
             path_list += (path0,path1)
             issame_list.append(issame)

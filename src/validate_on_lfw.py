@@ -101,8 +101,9 @@ def evaluate(sess, enqueue_op, image_paths_placeholder, labels_placeholder, phas
         # Flip every second image
         control_array += (labels_array % 2)*facenet.FLIP
     sess.run(enqueue_op, {image_paths_placeholder: image_paths_array, labels_placeholder: labels_array, control_placeholder: control_array})
-    
     embedding_size = int(embeddings.get_shape()[1])
+    print(batch_size)
+    print(nrof_images)
     assert nrof_images % batch_size == 0, 'The number of LFW images must be an integer multiple of the LFW batch size'
     nrof_batches = nrof_images // batch_size
     emb_array = np.zeros((nrof_images, embedding_size))
@@ -125,8 +126,10 @@ def evaluate(sess, enqueue_op, image_paths_placeholder, labels_placeholder, phas
         embeddings = emb_array
 
     assert np.array_equal(lab_array, np.arange(nrof_images))==True, 'Wrong labels used for evaluation, possibly caused by training examples left in the input pipeline'
-    tpr, fpr, accuracy, val, val_std, far = lfw.evaluate(embeddings, actual_issame, nrof_folds=nrof_folds, distance_metric=distance_metric, subtract_mean=subtract_mean)
+    tpr, fpr, accuracy, val, val_std, far_ = lfw.evaluate(embeddings, actual_issame, nrof_folds=nrof_folds, distance_metric=distance_metric, subtract_mean=subtract_mean)
     
+    far = 0.0
+
     print('Accuracy: %2.5f+-%2.5f' % (np.mean(accuracy), np.std(accuracy)))
     print('Validation rate: %2.5f+-%2.5f @ FAR=%2.5f' % (val, val_std, far))
     
@@ -139,9 +142,9 @@ def parse_arguments(argv):
     parser = argparse.ArgumentParser()
     
     parser.add_argument('lfw_dir', type=str,
-        help='Path to the data directory containing aligned LFW face patches.')
+        help='Path to the data directory containing aligned LFW face patches.', default = '/data/DATA_sansuo/sansuo_mtcnnpy_160')
     parser.add_argument('--lfw_batch_size', type=int,
-        help='Number of images to process in a batch in the LFW test set.', default=100)
+        help='Number of images to process in a batch in the LFW test set.', default=10)
     parser.add_argument('model', type=str, 
         help='Could be either a directory containing the meta_file and ckpt_file or a model protobuf (.pb) file')
     parser.add_argument('--image_size', type=int,

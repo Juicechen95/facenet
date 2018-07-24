@@ -41,6 +41,61 @@ from sklearn import metrics
 from scipy.optimize import brentq
 from scipy import interpolate
 
+
+def parse_arguments(argv):
+    parser = argparse.ArgumentParser()
+    '''#for lfw
+    parser.add_argument('--lfw_dir', type=str,
+        help='Path to the data directory containing aligned LFW face patches.', default = '~/data/face/lfw/lfw_mtcnnpy_160')
+    parser.add_argument('--lfw_batch_size', type=int,
+        help='Number of images to process in a batch in the LFW test set.', default=10)
+    parser.add_argument('--model', type=str, 
+        help='Could be either a directory containing the meta_file and ckpt_file or a model protobuf (.pb) file',
+        default = '~/data/model/pretrained-models/facenet/20180402-114759')
+    parser.add_argument('--image_size', type=int,
+        help='Image size (height, width) in pixels.', default=160)
+    parser.add_argument('--lfw_pairs', type=str,
+        help='The file containing the pairs to use for validation.', default='data/pairs.txt')
+    parser.add_argument('--lfw_nrof_folds', type=int,
+        help='Number of folds to use for cross validation. Mainly used for testing.', default=10)
+    parser.add_argument('--distance_metric', type=int,
+        help='Distance metric  0:euclidian, 1:cosine similarity.', default=1)
+    parser.add_argument('--use_flipped_images', 
+        help='Concatenates embeddings for the image and its horizontally flipped counterpart.', action='store_true', 
+        default = True)
+    parser.add_argument('--subtract_mean', 
+        help='Subtract feature mean before calculating distance.', action='store_true',
+        default = True)
+    parser.add_argument('--use_fixed_image_standardization', 
+        help='Performs fixed standardization of images.', action='store_true',
+        default = True)
+    '''
+    parser.add_argument('--lfw_dir', type=str,
+        help='Path to the data directory containing aligned LFW face patches.', default = '~/data/face/lfw/lfw_mtcnnpy_160')
+    parser.add_argument('--lfw_batch_size', type=int,
+        help='Number of images to process in a batch in the LFW test set.', default=10)
+    parser.add_argument('--model', type=str, 
+        help='Could be either a directory containing the meta_file and ckpt_file or a model protobuf (.pb) file',
+        default = '~/data/model/pretrained-models/facenet/20180402-114759')
+    parser.add_argument('--image_size', type=int,
+        help='Image size (height, width) in pixels.', default=160)
+    parser.add_argument('--lfw_pairs', type=str,
+        help='The file containing the pairs to use for validation.', default='data/pairs.txt')
+    parser.add_argument('--lfw_nrof_folds', type=int,
+        help='Number of folds to use for cross validation. Mainly used for testing.', default=10)
+    parser.add_argument('--distance_metric', type=int,
+        help='Distance metric  0:euclidian, 1:cosine similarity.', default=1)
+    parser.add_argument('--use_flipped_images', 
+        help='Concatenates embeddings for the image and its horizontally flipped counterpart.', action='store_true', 
+        default = True)
+    parser.add_argument('--subtract_mean', 
+        help='Subtract feature mean before calculating distance.', action='store_true',
+        default = True)
+    parser.add_argument('--use_fixed_image_standardization', 
+        help='Performs fixed standardization of images.', action='store_true',
+        default = True)
+    return parser.parse_args(argv)
+
 def main(args):
   
     with tf.Graph().as_default():
@@ -82,7 +137,8 @@ def main(args):
                 embeddings, label_batch, paths, actual_issame, args.lfw_batch_size, args.lfw_nrof_folds, args.distance_metric, args.subtract_mean,
                 args.use_flipped_images, args.use_fixed_image_standardization)
 
-              
+
+           
 def evaluate(sess, enqueue_op, image_paths_placeholder, labels_placeholder, phase_train_placeholder, batch_size_placeholder, control_placeholder,
         embeddings, labels, image_paths, actual_issame, batch_size, nrof_folds, distance_metric, subtract_mean, use_flipped_images, use_fixed_image_standardization):
     # Run forward pass to calculate embeddings
@@ -138,30 +194,6 @@ def evaluate(sess, enqueue_op, image_paths_placeholder, labels_placeholder, phas
     eer = brentq(lambda x: 1. - x - interpolate.interp1d(fpr, tpr)(x), 0., 1.)
     print('Equal Error Rate (EER): %1.3f' % eer)
     
-def parse_arguments(argv):
-    parser = argparse.ArgumentParser()
-    
-    parser.add_argument('lfw_dir', type=str,
-        help='Path to the data directory containing aligned LFW face patches.', default = '/data/DATA_sansuo/sansuo_mtcnnpy_160')
-    parser.add_argument('--lfw_batch_size', type=int,
-        help='Number of images to process in a batch in the LFW test set.', default=10)
-    parser.add_argument('model', type=str, 
-        help='Could be either a directory containing the meta_file and ckpt_file or a model protobuf (.pb) file')
-    parser.add_argument('--image_size', type=int,
-        help='Image size (height, width) in pixels.', default=160)
-    parser.add_argument('--lfw_pairs', type=str,
-        help='The file containing the pairs to use for validation.', default='data/pairs.txt')
-    parser.add_argument('--lfw_nrof_folds', type=int,
-        help='Number of folds to use for cross validation. Mainly used for testing.', default=10)
-    parser.add_argument('--distance_metric', type=int,
-        help='Distance metric  0:euclidian, 1:cosine similarity.', default=0)
-    parser.add_argument('--use_flipped_images', 
-        help='Concatenates embeddings for the image and its horizontally flipped counterpart.', action='store_true')
-    parser.add_argument('--subtract_mean', 
-        help='Subtract feature mean before calculating distance.', action='store_true')
-    parser.add_argument('--use_fixed_image_standardization', 
-        help='Performs fixed standardization of images.', action='store_true')
-    return parser.parse_args(argv)
-
+main(parse_arguments(sys.argv[1:]))
 if __name__ == '__main__':
     main(parse_arguments(sys.argv[1:]))

@@ -2,35 +2,25 @@
 for N in {1..4}; do \
 python src/align/align_dataset_mtcnn.py \
 ~/data/face/lfw/raw \
-~/data/face/lfw/lfw_mtcnnpy_160_2 \
---image_size 160 \
---margin 32 \
---random_order \
---gpu_memory_fraction 0.25 \
-& done
-# align the sansuo dataset  # Total number of images: 22299
-#                           # Number of successfully aligned images: 5523
-for N in {1..4}; do \
-python src/align/align_dataset_mtcnn.py \
-~/data/DATA_sansuo/raw \
-~/data/DATA_sansuo/sansuo_mtcnnpy_160 \
---image_size 160 \
---margin 32 \
---random_order \
---gpu_memory_fraction 0.25 \
-& done
-# align the CASIA dataset #Total number of images: 65848
-#                          #Number of successfully aligned images: 16283
-for N in {1..4}; do \
-python src/align/align_dataset_mtcnn.py \
-~/data/CASIA_webface/CASIA-raw \
-~/data/CASIA_webface/casia_mtcnnpy_160 \
+~/data/face/lfw/lfw_mtcnnpy_160 \
 --image_size 160 \
 --margin 32 \
 --random_order \
 --gpu_memory_fraction 0.25 \
 & done
 
+
+# align the sansuo dataset  # Total number of images: 22299
+#                           # Number of successfully aligned images: 5523
+for N in {1..4}; do \
+python src/align/align_dataset_mtcnn.py \
+~/data/face/sansuo/augmented_face \
+~/data/face/sansuo/augmented_mtcnnpy_160 \
+--image_size 160 \
+--margin 32 \
+--random_order \
+--gpu_memory_fraction 0.25 \
+& done
 
 
 # run the test on lfw
@@ -41,6 +31,8 @@ python src/validate_on_lfw.py \
 --use_flipped_images \
 --subtract_mean \
 --use_fixed_image_standardization
+
+
 # run test on sansuo
 python src/validate_on_lfw.py \
 ~/data/DATA_sansuo/sansuo_mtcnnpy_160 \

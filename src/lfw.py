@@ -43,7 +43,7 @@ def evaluate(embeddings, actual_issame, nrof_folds=10, distance_metric=0, subtra
     #    np.asarray(actual_issame), 1e-3, nrof_folds=nrof_folds, distance_metric=distance_metric, subtract_mean=subtract_mean)
     # return tpr, fpr, accuracy, val, val_std, far
     return tpr, fpr, accuracy, 0, 0, 0
-'''
+#lfw
 def get_paths(lfw_dir, pairs):
     nrof_skipped_pairs = 0
     path_list = []
@@ -87,7 +87,7 @@ def get_paths(lfw_dir, pairs):
         print('Skipped %d image pairs' % nrof_skipped_pairs)
     
     return path_list, issame_list
-  
+'''  
 def add_extension(path):
     if os.path.exists(path+'.jpg'):
         return path+'.jpg'

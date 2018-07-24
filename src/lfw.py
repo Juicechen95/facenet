@@ -44,6 +44,7 @@ def evaluate(embeddings, actual_issame, nrof_folds=10, distance_metric=0, subtra
     # return tpr, fpr, accuracy, val, val_std, far
     return tpr, fpr, accuracy, 0, 0, 0
 #lfw
+'''
 def get_paths(lfw_dir, pairs):
     nrof_skipped_pairs = 0
     path_list = []
@@ -74,10 +75,14 @@ def get_paths(lfw_dir, pairs):
     for pair in pairs:
         if pair[1] == '1':
             continue
-        else:
+        elif len(pair) == 2:
             path0 = add_extension(os.path.join(lfw_dir, pair[0], '0face' ))
             path1 = add_extension(os.path.join(lfw_dir, pair[0], 'card'))
             issame = True
+        elif len(pair) == 4:
+            path0 = add_extension(os.path.join(lfw_dir, pair[0], '0face'))
+            path1 = add_extension(os.path.join(lfw_dir, pair[2], 'card'))
+            issame = False
         if os.path.exists(path0) and os.path.exists(path1):    # Only add the pair if both paths exist
             path_list += (path0,path1)
             issame_list.append(issame)
@@ -87,7 +92,7 @@ def get_paths(lfw_dir, pairs):
         print('Skipped %d image pairs' % nrof_skipped_pairs)
     
     return path_list, issame_list
-'''  
+
 def add_extension(path):
     if os.path.exists(path+'.jpg'):
         return path+'.jpg'

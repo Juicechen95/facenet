@@ -71,16 +71,16 @@ def parse_arguments(argv):
         default = True)
     '''
     parser.add_argument('--lfw_dir', type=str,
-        help='Path to the data directory containing aligned LFW face patches.', default = '~/data/face/lfw/lfw_mtcnnpy_160')
+        help='Path to the data directory containing aligned LFW face patches.', default = '~/data/face/sansuo/augmented_mtcnnpy_160')
     parser.add_argument('--lfw_batch_size', type=int,
-        help='Number of images to process in a batch in the LFW test set.', default=10)
+        help='Number of images to process in a batch in the LFW test set.', default=1)
     parser.add_argument('--model', type=str, 
         help='Could be either a directory containing the meta_file and ckpt_file or a model protobuf (.pb) file',
         default = '~/data/model/pretrained-models/facenet/20180402-114759')
     parser.add_argument('--image_size', type=int,
         help='Image size (height, width) in pixels.', default=160)
     parser.add_argument('--lfw_pairs', type=str,
-        help='The file containing the pairs to use for validation.', default='data/pairs.txt')
+        help='The file containing the pairs to use for validation.', default='~/data/face/sansuo/pairs.txt')
     parser.add_argument('--lfw_nrof_folds', type=int,
         help='Number of folds to use for cross validation. Mainly used for testing.', default=10)
     parser.add_argument('--distance_metric', type=int,
@@ -158,8 +158,8 @@ def evaluate(sess, enqueue_op, image_paths_placeholder, labels_placeholder, phas
         control_array += (labels_array % 2)*facenet.FLIP
     sess.run(enqueue_op, {image_paths_placeholder: image_paths_array, labels_placeholder: labels_array, control_placeholder: control_array})
     embedding_size = int(embeddings.get_shape()[1])
-    print(batch_size)
-    print(nrof_images)
+    #print(batch_size)
+    #print(nrof_images)
     assert nrof_images % batch_size == 0, 'The number of LFW images must be an integer multiple of the LFW batch size'
     nrof_batches = nrof_images // batch_size
     emb_array = np.zeros((nrof_images, embedding_size))

@@ -1,10 +1,12 @@
 import os
 
-base = '用户/jiangchenzhi/data/face/sansuo/augmented_mtcnnpy_160'
+base = 'augmented_mtcnnpy_160'
 info = 'pairs.txt'
 f = open(info,'w')
 names = os.listdir(base)
 count = 0
+temp_name = ' '
+temp_persons = ' '
 for name in names:
 	count = count + 1
 	if not os.path.isdir(os.path.join(base,name)):
@@ -21,11 +23,12 @@ for name in names:
 			card = True
 	if face and card and count > 2:
 		f.write(name+' '+str(len(persons))+'\n')
-		f.write(name+' '+str(len(persons))+' ' + temp_name + ' ' + tr(len(temp_persons)) + '\n')
 	else:
 		print(name+' has no 0face or card')
+	if face and card and count%3==0:
+		f.write(name+' '+str(len(persons))+' ' + temp_name + ' ' +str(len(temp_persons)) + '\n')
 	temp_name = name
 	temp_persons = persons
-	if count > 200:
+	if count > 1000:
 		break
 f.close()

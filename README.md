@@ -1,5 +1,23 @@
 # test on sansuo
 
+## enviroment on lingzhi
+
+所有环境之前已经在我的账户里面配好了，我是使用vitualenv配的。之前在主用户下的环境我也配了，但我不知道环境还在不在。
+
+activate the environment
+
+```
+source ~/Venv/tf-1.7.0-gpu/bin/activate
+```
+
+deactivate the environment
+
+```
+deactivate
+```
+
+
+## begin testing
 ```
 # run test on sansuo
 python src/validate_on_lfw.py \

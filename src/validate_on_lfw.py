@@ -71,7 +71,7 @@ def parse_arguments(argv):
         default = True)
     '''
     parser.add_argument('--lfw_dir', type=str,
-        help='Path to the data directory containing aligned LFW face patches.', default = '~/data/face/sansuo/augmented_mtcnnpy_160')
+        help='Path to the data directory containing aligned LFW face patches.', default = '~/data/face/sansuo/raw')
     parser.add_argument('--lfw_batch_size', type=int,
         help='Number of images to process in a batch in the LFW test set.', default=1)
     parser.add_argument('--model', type=str, 

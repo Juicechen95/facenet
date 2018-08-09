@@ -187,7 +187,7 @@ def evaluate(sess, enqueue_op, image_paths_placeholder, labels_placeholder, phas
     far = 0.0
 
     print('Accuracy: %2.5f+-%2.5f' % (np.mean(accuracy), np.std(accuracy)))
-    print('Validation rate: %2.5f+-%2.5f @ FAR=%2.5f' % (val, val_std, far))
+    #print('Validation rate: %2.5f+-%2.5f @ FAR=%2.5f' % (val, val_std, far))
     
     auc = metrics.auc(fpr, tpr)
     print('Area Under Curve (AUC): %1.3f' % auc)

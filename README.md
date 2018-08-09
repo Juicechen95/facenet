@@ -30,7 +30,7 @@ python src/validate_on_lfw.py \
 --use_fixed_image_standardization
 ```
 
-需要修改前三个参数：
+可能需要修改前三个参数：
 1. data路径
 2. pre-train 模型路径
 3. pairs文件
